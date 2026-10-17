@@ -74,6 +74,7 @@ namespace lab_5
             return string.Compare(Brand, other.Brand, StringComparison.OrdinalIgnoreCase);
         }
 
+
         public override string ToString()
         {
             return $"{Brand} ({Year}) — Власник: {Owner}, Пробіг: {Mileage} км";

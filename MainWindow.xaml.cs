@@ -74,7 +74,48 @@ namespace lab_5
         {
             catalog.SortByMileage();
         }
+        private void MileageMin(object sender, RoutedEventArgs e)
+        {
+            int min = catalog.MileageMin();
 
+            MessageBox.Show($"Мінімальний пробіг серед авто {min} км",
+                            "Статистика", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void SearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(SearchTextBox.Text))
+            {
+                catalog.ResetFilter();
+            }
+            else
+            {
+                catalog.SearchCars(SearchTextBox.Text);
+            }
+        }
+
+        private void UniqueBrandsButton_Click(object sender, RoutedEventArgs e)
+        {
+            catalog.SearchUniqueBrands();
+        }
+
+        private void NewestCarsButton_Click(object sender, RoutedEventArgs e)
+        {
+            catalog.FindThreeNewestCars();
+        }
+
+        private void AverageMileageButton_Click(object sender, RoutedEventArgs e)
+        {
+            double avgMileage = catalog.CalculateAverageMileage();
+            MessageBox.Show($"Середній пробіг: {avgMileage:F1} км",
+                            "Агрегація даних",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+        }
+
+        private void GroupByYearButton_Click(object sender, RoutedEventArgs e)
+        {
+            catalog.GroupCarsByYear();
+        }
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(FilterYearTextBox.Text))

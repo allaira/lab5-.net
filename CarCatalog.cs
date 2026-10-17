@@ -39,9 +39,54 @@ namespace lab_5
 
         public void SortByMileage()
         {
-            var sortedList = new List<Car>(Cars);
-            sortedList.Sort(new CarMileageComparer());
-            UpdateVisibleCollection(sortedList);
+            var sortedCars = Cars.OrderBy(c => c.Mileage).ToList();
+            UpdateVisibleCollection(sortedCars);
+        }
+
+        public void SortByBrand()
+        {
+            var sortedCars = Cars.OrderBy(c => c.Brand).ToList();
+            UpdateVisibleCollection(sortedCars);
+        }
+
+        public void SearchCars(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                ResetFilter();
+                return;
+            }
+
+            string lowerTerm = searchTerm.ToLowerInvariant();
+            var searchResult = allCars.Where(c =>
+            c.Brand.ToLowerInvariant().Contains(lowerTerm) || 
+            c.Owner.ToLowerInvariant().Contains(lowerTerm)).ToList();
+
+            UpdateVisibleCollection(searchResult);
+        }
+        public void SearchUniqueBrands()
+        {
+            var uniqueBrands = allCars.Select(c => c.Brand).Distinct().OrderBy(b => b).ToList();
+            var brandCars = uniqueBrands.Select(brand => new Car(brand, "-", 2000, 0)).ToList();
+            UpdateVisibleCollection(brandCars);
+        }
+        public void FindThreeNewestCars()
+        {
+            var newestCars = allCars.OrderByDescending(c => c.Year).Take(3).ToList();
+            UpdateVisibleCollection(newestCars);
+        }
+        public double CalculateAverageMileage()
+        {
+            if (allCars.Count == 0)
+            {
+                return 0;
+            }
+            return allCars.Average(c => c.Mileage);
+        }
+        public void GroupCarsByYear()
+        {
+            var grouped = allCars.GroupBy(c => c.Year).OrderByDescending(g => g.Key).SelectMany(g => g).ToList();
+            UpdateVisibleCollection(grouped); 
         }
 
         public void FilterByYearBefore(int year)
@@ -63,6 +108,21 @@ namespace lab_5
                 Cars.Add(car);
             }
         }
+
+        public int MileageMin()
+        {
+            int min = Cars[0].Mileage;
+
+            foreach (var car in Cars)
+            {
+                if (car.Mileage < min)
+                {
+                    min = car.Mileage;
+                }
+            }
+            return min;
+        }
+
 
         public async Task SaveAsync()
         {
